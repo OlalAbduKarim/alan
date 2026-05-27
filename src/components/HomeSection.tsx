@@ -63,7 +63,7 @@ export default function HomeSection({
             <span className="font-mono text-[10px] tracking-widest text-[#e5e0d8] uppercase font-bold">Alan Art Vision</span>
           </div>
 
-          <h1 className="font-serif text-5xl md:text-7xl italic font-bold tracking-tight leading-tight max-w-4xl" id="hero-headline">
+          <h1 className="font-serif text-3.5xl sm:text-5.5xl md:text-7xl italic font-bold tracking-tight leading-tight max-w-4xl" id="hero-headline">
             Teach. Create. Collaborate.
           </h1>
 
@@ -99,7 +99,7 @@ export default function HomeSection({
             <span className="font-mono text-xs uppercase tracking-widest font-bold text-brand-terracotta">
               THE BEST-SELLER TEXTBOOK
             </span>
-            <h2 className="font-serif text-3xl md:text-4.5xl text-brand-charcoal font-semibold">
+            <h2 className="font-serif text-2xl sm:text-3.5xl md:text-4.5xl text-brand-charcoal font-semibold">
               Curriculum Highlight
             </h2>
             <div className="w-16 h-1 bg-brand-sage mx-auto rounded-full" />
@@ -138,7 +138,7 @@ export default function HomeSection({
                 <span className="font-mono text-[10px] tracking-widest font-bold uppercase">Classroom Verified (4.9 rating)</span>
               </div>
 
-              <h3 className="font-serif text-3xl md:text-4xl font-bold text-brand-charcoal leading-tight">
+              <h3 className="font-serif text-2xl sm:text-3.5xl md:text-4xl font-bold text-[#1e1c19] leading-tight">
                 {bestSeller.title}
               </h3>
 
@@ -177,7 +177,7 @@ export default function HomeSection({
                     }}
                     className="flex-1 px-4 py-3 bg-brand-charcoal text-white text-[11px] font-bold tracking-widest uppercase hover:bg-brand-terracotta transition-colors cursor-pointer"
                   >
-                    Workbook • ${bestSeller.price}
+                    Workbook • {bestSeller.id === 'art-of-watercolor' ? 'UGX 25,000' : 'UGX 35,000'}
                   </button>
                   <button
                     onClick={() => {
@@ -185,7 +185,7 @@ export default function HomeSection({
                     }}
                     className="flex-1 px-4 py-3 bg-brand-cream text-brand-charcoal border border-brand-tan text-[11px] font-bold tracking-widest uppercase hover:bg-brand-charcoal hover:text-white transition-colors cursor-pointer"
                   >
-                    eBook • ${bestSeller.ebookPrice}
+                    eBook • {bestSeller.id === 'art-of-watercolor' ? 'UGX 15,000' : 'UGX 18,000'}
                   </button>
                 </div>
 
@@ -208,7 +208,7 @@ export default function HomeSection({
           <span className="font-mono text-[10px] tracking-widest font-bold uppercase text-[#7d8c7c]">
             Fine Art Portfolio
           </span>
-          <h2 className="font-serif text-3xl md:text-5xl italic font-bold text-brand-charcoal">
+          <h2 className="font-serif text-2.5xl sm:text-4xl md:text-5xl italic font-bold text-brand-charcoal">
             Selected Works
           </h2>
           <p className="text-brand-charcoal/70 text-xs md:text-sm max-w-xl mx-auto tracking-wide font-light">
@@ -251,8 +251,8 @@ export default function HomeSection({
                 
                 <div className="flex items-center justify-between border-t border-brand-tan mt-5 pt-3">
                   <span className="font-mono text-[10px] uppercase font-bold text-brand-charcoal/50 pr-2">{art.dimensions}</span>
-                  <span className="font-serif text-sm font-bold italic text-[#c46c4d]">
-                    {art.status === 'available' ? `$${art.price.toLocaleString()}` : 'Archived'}
+                  <span className="font-serif text-xs md:text-sm font-bold italic text-[#c46c4d]">
+                    {art.status === 'available' ? `UGX ${art.price.toLocaleString()}` : 'Archived'}
                   </span>
                 </div>
               </div>
@@ -282,7 +282,7 @@ export default function HomeSection({
             <span className="font-mono text-[9px] uppercase tracking-widest text-[#7d8c7c] font-bold">
               Institutional Cooperation
             </span>
-            <h2 className="font-serif text-3xl md:text-5xl font-bold leading-tight">
+            <h2 className="font-serif text-2.5xl sm:text-4xl md:text-5xl font-bold leading-tight">
               Bring Professional Curricula to Your Department
             </h2>
             <p className="text-brand-cream/80 text-xs md:text-sm leading-relaxed font-light tracking-wide">
@@ -316,7 +316,7 @@ export default function HomeSection({
           <span className="font-mono text-[10px] tracking-widest font-bold uppercase text-[#c46c4d]">
             Community Trust
           </span>
-          <h2 className="font-serif text-3xl md:text-5xl italic font-bold text-brand-charcoal">
+          <h2 className="font-serif text-2.5xl sm:text-4xl md:text-5xl italic font-bold text-brand-charcoal">
             Teacher Reviews
           </h2>
           <div className="w-12 h-[1px] bg-[#7d8c7c] mx-auto mt-4" />

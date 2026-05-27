@@ -91,7 +91,7 @@ export default function PortfolioSection({
         <span className="font-mono text-xs uppercase tracking-widest text-brand-sage-dark font-bold">
           STUDIO ARCHIVES
         </span>
-        <h1 className="font-serif text-3.5xl md:text-5.5xl text-brand-charcoal font-semibold tracking-tight">
+        <h1 className="font-serif text-2.5xl sm:text-4xl md:text-5.5xl text-brand-charcoal font-semibold tracking-tight">
           Fine Art Canvas Grid
         </h1>
         <p className="text-sm text-brand-charcoal/70 leading-relaxed font-light">

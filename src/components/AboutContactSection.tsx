@@ -70,7 +70,7 @@ export default function AboutContactSection({
             <span>Ugandan Artist & Educator Profile</span>
           </div>
 
-          <h1 className="font-serif text-4xl md:text-5.5xl font-bold text-brand-charcoal leading-tight tracking-tight animate-fade-in">
+          <h1 className="font-serif text-3xl sm:text-4.5xl md:text-5.5xl font-bold text-brand-charcoal leading-tight tracking-tight animate-fade-in">
             Ayesigamukama Alan
           </h1>
 

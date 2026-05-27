@@ -124,7 +124,7 @@ export default function ShopSection({
           <span className="font-mono text-xs uppercase tracking-widest text-brand-terracotta font-bold">
             EDUCATIONAL DISTRIBUTOR
           </span>
-          <h1 className="font-serif text-3xl md:text-5.5xl text-brand-charcoal font-semibold">
+          <h1 className="font-serif text-2.5xl sm:text-4xl md:text-5.5xl text-brand-charcoal font-semibold">
             The Studio Bookshop
           </h1>
           <p className="text-brand-charcoal/65 text-sm md:text-base max-w-xl">
