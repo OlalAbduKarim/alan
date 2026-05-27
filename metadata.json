@@ -1,0 +1,6 @@
+{
+  "name": "Alan Art Vision",
+  "description": "Comprehensive art publisher, independent fine art gallery, and textbook curriculum hub for Ugandan artist and educator Alan Ayesigamukama.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
