@@ -136,6 +136,23 @@ function writeArtworkOrders(orders: any) {
   fs.writeFileSync(ARTWORK_ORDERS_FILE, JSON.stringify(orders, null, 2));
 }
 
+const BOOK_BOOKINGS_FILE = path.join(process.cwd(), "book_bookings.json");
+
+function readBookBookings() {
+  if (fs.existsSync(BOOK_BOOKINGS_FILE)) {
+    try {
+      return JSON.parse(fs.readFileSync(BOOK_BOOKINGS_FILE, "utf-8"));
+    } catch {
+      return [];
+    }
+  }
+  return [];
+}
+
+function writeBookBookings(bookings: any) {
+  fs.writeFileSync(BOOK_BOOKINGS_FILE, JSON.stringify(bookings, null, 2));
+}
+
 function logEmail(to: string, subject: string, body: string, attachments: string[] = []) {
   const emails = readEmails();
   emails.unshift({
@@ -186,6 +203,94 @@ app.get("/api/leads", (req, res) => {
 // 2b. GET artwork orders
 app.get("/api/artwork-orders", (req, res) => {
   res.json(readArtworkOrders());
+});
+
+// 2b-2. GET book bookings
+app.get("/api/book-bookings", (req, res) => {
+  res.json(readBookBookings());
+});
+
+// 2c-2. POST book booking
+app.post("/api/book-booking", async (req, res) => {
+  try {
+    const { bookId, bookTitle, purchaseType, quantity, customerName, customerEmail, customerPhone, message } = req.body;
+    if (!bookId || !bookTitle || !customerName || !customerEmail || !customerPhone || !quantity) {
+      return res.status(400).json({ error: "Missing required booking parameters" });
+    }
+
+    const bookings = readBookBookings();
+    const newBooking = {
+      id: `booking-${Date.now()}`,
+      bookId,
+      bookTitle,
+      purchaseType,
+      quantity: parseInt(quantity) || 1,
+      customerName,
+      customerEmail,
+      customerPhone,
+      message: message || "",
+      bookedAt: new Date().toISOString()
+    };
+
+    bookings.unshift(newBooking);
+    writeBookBookings(bookings);
+
+    // Write simulated emails to SMTP Outbox with a personalized message
+    let responderBody = `Dear ${customerName},\n\nThank you for booking/ordering your copy of "${bookTitle}" (${purchaseType} Edition).\n\nDetails of your reservation:\n- Copies requested: ${quantity}\n- Format selection: ${purchaseType}\n- Email: ${customerEmail}\n- Phone: ${customerPhone}\n- Message: ${message || 'None'}\n\nI have recorded your request in our gallery books database. I will contact you on call or WhatsApp at ${customerPhone} to coordinate payment and classroom packet delivery details!\n\nWarmly,\nAlan Ayesigamukama\nUgandan Artist & Art Educator\nEmail: alanayesigamukama@gmail.com\nPhone/WhatsApp: 0700866521 / 0761188522`;
+
+    if (ai) {
+      try {
+        const aiPrompt = `Compose an elegant, encouraging, personal email back to ${customerName} who just submitted a school booking form to order/reserve ${quantity} copies of Alan's textbook "${bookTitle}" (${purchaseType} Edition).
+        Client Details: 
+        - Name: ${customerName}
+        - Email: ${customerEmail} 
+        - Phone: ${customerPhone}
+        - Message Notes: "${message || 'None provided'}"
+        Artist Info:
+        - Alan Ayesigamukama (Ugandan Artist, Educator and Author)
+        - Contact: Phone/WhatsApp 0700866521 / 0761188522, email alanayesigamukama@gmail.com
+        Requirements:
+        1. Keep the mood warm, grateful, and professional.
+        2. Specifically acknowledge the requested book format (${purchaseType}) and volume size (${quantity} copies).
+        3. Confirm that Alan will personally contact them via WhatsApp (${customerPhone}) to arrange secure hand-off or school delivery.
+        4. Keep it concise (120-150 words).`;
+
+        const response = await ai.models.generateContent({
+          model: "gemini-3.5-flash",
+          contents: aiPrompt,
+        });
+
+        if (response.text) {
+          responderBody = response.text.trim();
+        }
+      } catch (err) {
+        console.error("Gemini failed to generate book booking email:", err);
+      }
+    }
+
+    // Write email alerts to the Sim outbox stream
+    logEmail(
+      "alanayesigamukama@gmail.com",
+      `[NEW BOOKING INQUIRY] ${customerName} is requesting ${quantity}x "${bookTitle}"`,
+      `Hello Alan,\n\nYou have received a new textbook booking reservation from your Art Shop catalog:\n\n- Book: ${bookTitle}\n- Purchase Format: ${purchaseType}\n- Quantity Ordered: ${quantity}\n- Customer Name: ${customerName}\n- Contact Email: ${customerEmail}\n- Contact Phone: ${customerPhone}\n\nUser Notes:\n"${message || 'No extra notes provided'}"`
+    );
+
+    logEmail(
+      customerEmail,
+      `[Alan Art Vision] Book Booking Reservation Confirmed - "${bookTitle}"`,
+      responderBody
+    );
+
+    res.json({
+      success: true,
+      booking: newBooking,
+      message: responderBody
+    });
+
+  } catch (err) {
+    console.error("Book booking error:", err);
+    res.status(500).json({ error: "Internal server error occurred while booking" });
+  }
 });
 
 // 2c. POST artwork order

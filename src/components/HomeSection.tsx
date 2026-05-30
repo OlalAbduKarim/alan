@@ -251,8 +251,8 @@ export default function HomeSection({
                 
                 <div className="flex items-center justify-between border-t border-brand-tan mt-5 pt-3">
                   <span className="font-mono text-[10px] uppercase font-bold text-brand-charcoal/50 pr-2">{art.dimensions}</span>
-                  <span className="font-serif text-xs md:text-sm font-bold italic text-[#c46c4d]">
-                    {art.status === 'available' ? `UGX ${art.price.toLocaleString()}` : 'Archived'}
+                  <span className="font-serif text-xs md:text-sm font-bold italic text-[#7d8c7c]">
+                    {art.status === 'available' ? 'Available' : 'Collected'}
                   </span>
                 </div>
               </div>

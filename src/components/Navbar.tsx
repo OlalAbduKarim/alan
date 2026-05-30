@@ -84,19 +84,6 @@ export default function Navbar({ currentTab, setCurrentTab, cartCount, openCart 
             <span className="inline sm:hidden">Office</span>
           </button>
 
-          {/* Shopping Cart button */}
-          <button
-            id="nav-cart-btn"
-            onClick={openCart}
-            className="relative p-2 md:p-2.5 rounded-full bg-brand-charcoal text-brand-cream hover:bg-brand-terracotta transition-all cursor-pointer shadow-sm flex-none"
-          >
-            <ShoppingCart className="w-3.5 h-3.5 md:w-4 h-4" />
-            {cartCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-brand-terracotta text-brand-cream font-mono text-[8.5px] md:text-[9px] font-bold w-3.5 h-3.5 md:w-4 h-4 rounded-full flex items-center justify-center border border-brand-cream">
-                {cartCount}
-              </span>
-            )}
-          </button>
         </div>
       </div>
 

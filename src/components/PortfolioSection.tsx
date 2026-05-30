@@ -149,9 +149,9 @@ export default function PortfolioSection({
               </div>
 
               <div className="text-right">
-                <span className="font-mono text-[8px] uppercase tracking-widest text-[#7d8c7c] font-bold block mb-0.5">Value</span>
-                <span className="font-serif text-base italic font-bold text-[#c46c4d]">
-                  {art.status === 'available' ? `UGX ${art.price.toLocaleString()}` : 'Collected'}
+                <span className="font-mono text-[8px] uppercase tracking-widest text-[#7d8c7c] font-bold block mb-0.5">Status</span>
+                <span className="font-serif text-xs font-bold text-brand-sage-dark bg-brand-sage/10 px-2 py-0.5 rounded">
+                  {art.status === 'available' ? 'Available' : 'Collected'}
                 </span>
               </div>
             </div>
@@ -271,7 +271,7 @@ export default function PortfolioSection({
                     </h2>
 
                     <p className="text-[11px] text-brand-charcoal/65 leading-relaxed font-light">
-                      Reserve <b>"{selectedArt.title}"</b> priced at <b>UGX {selectedArt.price.toLocaleString()}</b>. Entering details saves the canvas to the studio logs and alerts the artist instantly.
+                      Reserve and inquire about original painting <b>"{selectedArt.title}"</b>. Entering details saves the canvas to the studio logs and alerts the artist instantly.
                     </p>
 
                     {orderError && (
@@ -354,8 +354,8 @@ export default function PortfolioSection({
                       </div>
                       <div className="flex justify-between pb-1">
                         <span className="text-brand-charcoal/50">Acquisition pricing</span>
-                        <span className="font-mono text-sm font-bold text-brand-terracotta">
-                          {selectedArt.status === 'available' ? `UGX ${selectedArt.price.toLocaleString()}` : 'Sold (Collected)'}
+                        <span className="font-mono text-xs font-bold text-brand-terracotta bg-brand-terracotta/5 px-2 py-0.5 rounded">
+                          {selectedArt.status === 'available' ? 'Price Available Upon Request' : 'Sold (Collected)'}
                         </span>
                       </div>
                     </div>
@@ -377,7 +377,7 @@ export default function PortfolioSection({
                           onClick={() => setIsOrdering(true)}
                           className="w-full py-4 bg-brand-terracotta text-white hover:bg-brand-terracotta-dark transition-all rounded text-xs select-none uppercase tracking-widest font-bold shadow flex items-center justify-center gap-1.5 cursor-pointer font-sans"
                         >
-                          Secure Order & Checkout Original
+                          Secure Inquiry & Reserve Original
                           <ArrowRight className="w-4 h-4" />
                         </button>
                         <button

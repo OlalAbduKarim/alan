@@ -24,12 +24,30 @@ export default function AdminPortal({
   artworkOrders = []
 }: AdminProps) {
 
-  const [activePane, setActivePane] = useState<'leads' | 'stock' | 'emails' | 'artwork'>('leads');
+  const [activePane, setActivePane] = useState<'leads' | 'stock' | 'emails' | 'artwork' | 'books'>('leads');
   const [successMsg, setSuccessMsg] = useState('');
+  const [bookBookings, setBookBookings] = useState<any[]>([]);
+  const [bookingsLoading, setBookingsLoading] = useState(false);
+
+  const fetchBookBookings = async () => {
+    setBookingsLoading(true);
+    try {
+      const res = await fetch("/api/book-bookings");
+      if (res.ok) {
+        const data = await res.json();
+        setBookBookings(data);
+      }
+    } catch (err) {
+      console.error("Failed to load book bookings:", err);
+    } finally {
+      setBookingsLoading(false);
+    }
+  };
 
   useEffect(() => {
     refreshLeads();
     refreshEmails();
+    fetchBookBookings();
   }, [activePane]);
 
   const handleStockAdjust = (bookId: string, currentVal: number, change: number) => {
@@ -98,6 +116,17 @@ export default function AdminPortal({
             }`}
           >
             Art Bookings ({artworkOrders.length})
+          </button>
+
+          <button
+            onClick={() => setActivePane('books')}
+            className={`px-4 py-2.5 rounded-sm font-sans text-xs font-semibold uppercase tracking-wider border transition-all cursor-pointer ${
+              activePane === 'books'
+                ? 'bg-brand-sage text-white border-brand-sage shadow-xs'
+                : 'bg-white/5 border-white/10 text-brand-cream/80 hover:bg-white/10'
+            }`}
+          >
+            Textbook Bookings ({bookBookings.length})
           </button>
         </div>
       </div>
@@ -384,6 +413,91 @@ export default function AdminPortal({
                         className="bg-green-50 text-green-700 hover:bg-green-100 border border-green-250 text-[10px] px-2.5 py-1 uppercase tracking-wide font-extrabold flex items-center gap-1 cursor-pointer transition-colors"
                       >
                         💬 Confirm via WhatsApp
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* PANE 5: TEXTBOOKS BOOKINGS INQUIRIES */}
+      {activePane === 'books' && (
+        <div className="bg-white rounded-2xl border border-brand-tan/60 p-6 md:p-8 space-y-6 shadow-xs">
+          <div className="flex items-center justify-between border-b border-brand-tan/40 pb-4">
+            <div className="flex items-center gap-2">
+              <Database className="w-5 h-5 text-brand-sage animate-pulse" />
+              <div>
+                <h3 className="font-serif text-lg font-bold text-brand-charcoal">Textbook Bookings Database</h3>
+                <p className="text-[11px] font-mono text-brand-charcoal/50 uppercase mt-0.5">Dual-channel school reservation coordinates</p>
+              </div>
+            </div>
+
+            <button 
+              onClick={fetchBookBookings}
+              disabled={bookingsLoading}
+              className="p-2 border border-brand-tan hover:bg-brand-tan rounded transition-all text-brand-charcoal/70 cursor-pointer"
+              title="Refresh textbook bookings queue"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${bookingsLoading ? 'animate-spin' : ''}`} />
+            </button>
+          </div>
+
+          {bookBookings.length === 0 ? (
+            <div className="text-center py-16 text-brand-charcoal/50 italic text-xs">
+              No textbook inquiries logged yet. Place orders inside Book Shop section to record textbook reservations here.
+            </div>
+          ) : (
+            <div className="space-y-4 max-h-[600px] overflow-y-auto pr-1">
+              {[...bookBookings].map((booking, idx) => (
+                <div key={booking.id || idx} className="border border-brand-tan p-5 rounded-xl bg-[#fdfaf6] hover:bg-white transition flex flex-col md:flex-row md:items-center justify-between gap-5 animate-fade-in">
+                  <div className="space-y-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="font-mono text-[9px] font-bold text-white bg-brand-charcoal px-2 py-0.5 uppercase">
+                        Book Booking Ref: #{booking.id?.slice(-6) || 'N/A'}
+                      </span>
+                      <span className="font-mono text-[9px] font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                        {booking.purchaseType} Format
+                      </span>
+                      <span className="font-mono text-[9px] bg-brand-sage/12 text-brand-sage-dark font-extrabold uppercase py-0.5 px-2 rounded">
+                        Qty: {booking.quantity}
+                      </span>
+                    </div>
+
+                    <h4 className="font-serif text-base font-bold text-brand-charcoal pt-1">
+                      Textbook: "{booking.bookTitle}"
+                    </h4>
+
+                    <p className="text-xs text-brand-charcoal/70 font-light font-sans">
+                      School Booker: <span className="font-bold text-brand-charcoal">{booking.customerName}</span> (
+                      <a href={`mailto:${booking.customerEmail}`} className="text-[#c46c4d] border-b border-[#c46c4d]/30 hover:border-[#c46c4d] font-mono text-xs">{booking.customerEmail}</a>)
+                    </p>
+
+                    <p className="text-xs text-brand-charcoal/70 font-light font-sans">
+                      Phone Contact: <span className="font-mono text-brand-charcoal font-bold">{booking.customerPhone}</span>
+                    </p>
+
+                    {booking.message && (
+                      <p className="text-[11px] text-brand-charcoal/65 italic border-l-2 border-brand-tan pl-2 mt-2 whitespace-pre-wrap">
+                        "{booking.message}"
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="text-right flex flex-col items-end gap-1.5 min-w-[140px]">
+                    <span className="font-mono text-[10px] text-[#7d8c7c] block">
+                      {new Date(booking.bookedAt).toLocaleString()}
+                    </span>
+                    <div className="flex flex-col gap-1">
+                      <a 
+                        href={`https://wa.me/${booking.customerPhone.replace(/[^0-9]/g, '') || '256700866521'}?text=Hello%20${encodeURIComponent(booking.customerName)},%20this%20is%20Alan%20Ayesigamukama%20replying%20to%20your%20textbook%20booking%20of%20"${encodeURIComponent(booking.bookTitle)}"`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="bg-green-50 text-green-700 hover:bg-green-100 border border-green-250 text-[10px] px-2.5 py-1 uppercase tracking-wide font-extrabold flex items-center gap-1 cursor-pointer transition-colors"
+                      >
+                        💬 Chat on WhatsApp
                       </a>
                     </div>
                   </div>

@@ -307,14 +307,6 @@ export default function App() {
         {currentTab === 'shop' && (
           <ShopSection 
             books={BOOKS.map(b => ({ ...b, stock: inventory[b.id] ?? b.stock }))}
-            cart={cart}
-            addToCart={addToCart}
-            removeFromCart={removeFromCart}
-            updateCartQuantity={updateCartQuantity}
-            toggleBookplates={toggleBookplates}
-            checkoutResult={checkoutResult}
-            checkoutLoading={checkoutLoading}
-            processCheckout={handleCheckoutProcess}
             selectedBookForPreview={selectedBookForPreview}
             setSelectedBookForPreview={setSelectedBookForPreview}
           />
